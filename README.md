@@ -49,7 +49,7 @@ Requirements:
 
 Once the backend and the fronted are started, you can navigate to `http://localhost:3000` in your browser and start resolving multiplication challenges. This time, you'll see a new table that displays your previous attempts.
 
-![Application - Screenshot](resources/app-last-attempts-screenshot.png)
+![Application - Screenshot](resources/app-last-attempts.png)
 
 Additionally, you can access the H2 Console if you want to manage or query the database. The console is located at [http://localhost:8080/h2-console](http://localhost:8080/h2-console). 
 
