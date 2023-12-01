@@ -1,5 +1,6 @@
 import * as React from "react";
 import ApiClient from "../services/ApiClient";
+import LastAttemptsComponent from "./LastAttemptsComponent";
 class ChallengeComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -12,8 +13,13 @@ class ChallengeComponent extends React.Component {
         this.handleSubmitResult = this.handleSubmitResult.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
+    
     componentDidMount(): void {
-        ApiClient.challenge().then(
+        this.refreshChallenge();
+    }
+    
+    refreshChallenge() {
+        ChallengeApiClient.challenge().then(
             res => {
                 if (res.ok) {
                     res.json().then(json => {
@@ -28,12 +34,14 @@ class ChallengeComponent extends React.Component {
             }
         );
     }
+
     handleChange(event) {
         const name = event.target.name;
         this.setState({
             [name]: event.target.value
         });
     }
+    
     handleSubmitResult(event) {
         event.preventDefault();
         ApiClient.sendGuess(this.state.user,
@@ -54,11 +62,13 @@ class ChallengeComponent extends React.Component {
                 }
             });
     }
+    
     updateMessage(m: string) {
         this.setState({
             message: m
         });
     }
+    
     render() {
         return (
             <div>
