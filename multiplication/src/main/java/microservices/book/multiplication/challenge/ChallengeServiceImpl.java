@@ -34,8 +34,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         );
 
         // Stores the attempt
-        ChallengeAttempt storedAttempt = attemptRepository.
-        save(checkedAttempt);
+        ChallengeAttempt storedAttempt = attemptRepository.save(checkedAttempt);
         return storedAttempt;
     }
 }
