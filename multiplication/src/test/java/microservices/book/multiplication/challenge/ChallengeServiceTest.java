@@ -33,15 +33,13 @@ public class ChallengeServiceTest {
              userRepository,
              attemptRepository
         );
-        // Keep in mind that we needed to move the
-        // given(attemptRepository)... to the test cases
-        // that use it to prevent the unused stubs errors.
     }
 
     @Test
     public void checkCorrectAttemptTest() {
         // given
         given(attemptRepository.save(any())).will(returnsFirstArg());
+
         ChallengeAttemptDTO attemptDTO =
                 new ChallengeAttemptDTO(50, 60, "john_doe", 3000);
 
@@ -52,7 +50,6 @@ public class ChallengeServiceTest {
         // then
         then(resultAttempt.isCorrect()).isTrue();
 
-        // newly added lines
         verify(userRepository).save(new User("john_doe"));
         verify(attemptRepository).save(resultAttempt);
     }
@@ -76,8 +73,6 @@ public class ChallengeServiceTest {
     @Test
     public void checkExistingUserTest() {
         // given
-        given(attemptRepository.save(any()))
-                .will(returnsFirstArg());
         User existingUser = new User(1L, "john_doe");
         given(userRepository.findByAlias("john_doe"))
                 .willReturn(Optional.of(existingUser));
