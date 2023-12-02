@@ -1,7 +1,9 @@
 package microservices.book.multiplication.challenge;
+
 import lombok.*;
 import microservices.book.multiplication.user.User;
 import jakarta.persistence.*;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -12,9 +14,9 @@ public class ChallengeAttempt {
   private Long id;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "USER_ID")
-  private Users users;
+  private User user;
   private int factorA;
   private int factorB;
-  private int guess;
+  private int resultAttempt;
   private boolean correct;
 }

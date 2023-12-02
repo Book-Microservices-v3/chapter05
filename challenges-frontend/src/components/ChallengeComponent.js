@@ -1,6 +1,5 @@
 import * as React from "react";
 import ApiClient from "../services/ApiClient";
-import LastAttemptsComponent from "./LastAttemptsComponent";
 class ChallengeComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -19,7 +18,7 @@ class ChallengeComponent extends React.Component {
     }
     
     refreshChallenge() {
-        ChallengeApiClient.challenge().then(
+        ApiClient.challenge().then(
             res => {
                 if (res.ok) {
                     res.json().then(json => {

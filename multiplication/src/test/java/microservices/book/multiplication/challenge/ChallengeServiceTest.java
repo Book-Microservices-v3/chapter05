@@ -2,8 +2,20 @@ package microservices.book.multiplication.challenge;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+
+import microservices.book.multiplication.user.User;
+import microservices.book.multiplication.user.UserRepository;
 
 import static org.assertj.core.api.BDDAssertions.then;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+
+import java.util.List;
+import java.util.Optional;
 
 public class ChallengeServiceTest {
 
@@ -21,13 +33,15 @@ public class ChallengeServiceTest {
              userRepository,
              attemptRepository
         );
-        given(attemptRepository.save(any()))
-             .will(returnsFirstArg());
+        // Keep in mind that we needed to move the
+        // given(attemptRepository)... to the test cases
+        // that use it to prevent the unused stubs errors.
     }
 
     @Test
     public void checkCorrectAttemptTest() {
         // given
+        given(attemptRepository.save(any())).will(returnsFirstArg());
         ChallengeAttemptDTO attemptDTO =
                 new ChallengeAttemptDTO(50, 60, "john_doe", 3000);
 
@@ -36,7 +50,7 @@ public class ChallengeServiceTest {
                 challengeService.verifyAttempt(attemptDTO);
 
         // then
-        then(resultAttempt.correct()).isTrue();
+        then(resultAttempt.isCorrect()).isTrue();
 
         // newly added lines
         verify(userRepository).save(new User("john_doe"));
@@ -54,7 +68,9 @@ public class ChallengeServiceTest {
                 challengeService.verifyAttempt(attemptDTO);
 
         // then
-        then(resultAttempt.correct()).isFalse();
+        then(resultAttempt.isCorrect()).isFalse();
+        verify(userRepository).save(new User("john_doe"));
+        verify(attemptRepository).save(resultAttempt);
     }
 
     @Test
@@ -77,5 +93,23 @@ public class ChallengeServiceTest {
         then(resultAttempt.getUser()).isEqualTo(existingUser);
         verify(userRepository, never()).save(any());
         verify(attemptRepository).save(resultAttempt);
+    }
+
+    @Test
+    public void retrieveStatsTest() {
+        // given
+        User user = new User("john_doe");
+        ChallengeAttempt attempt1 = new ChallengeAttempt(1L, user, 50, 60, 3010, false);
+        ChallengeAttempt attempt2 = new ChallengeAttempt(2L, user, 50, 60, 3051, false);
+        List<ChallengeAttempt> lastAttempts = List.of(attempt1, attempt2);
+        given(attemptRepository.findTop10ByUserAliasOrderByIdDesc("john_doe"))
+                .willReturn(lastAttempts);
+
+        // when
+        List<ChallengeAttempt> latestAttemptsResult =
+                challengeService.getStatsForUser("john_doe");
+
+        // then
+        then(latestAttemptsResult).isEqualTo(lastAttempts);
     }
 }

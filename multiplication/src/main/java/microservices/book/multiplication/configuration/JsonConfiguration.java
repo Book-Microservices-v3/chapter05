@@ -1,4 +1,4 @@
-package microservices.book.gamification.configuration;
+package microservices.book.multiplication.configuration;
 
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.hibernate5.jakarta.Hibernate5JakartaModule;
@@ -11,5 +11,4 @@ public class JsonConfiguration {
     public Module hibernateModule() {
         return new Hibernate5JakartaModule();
     }
-
 }
