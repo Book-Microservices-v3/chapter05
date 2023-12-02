@@ -17,9 +17,9 @@ class ApiClient {
                 },
                 body: JSON.stringify(
                     {
-                        userAlias: user,
                         factorA: a,
                         factorB: b,
+                        userAlias: user,
                         guess: guess
                     }
                 )
